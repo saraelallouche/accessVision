@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AccessvisionConfig(AppConfig):
+class AccessvisionfrontConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'accessVision'
+    name = 'accessVisionFront'

@@ -6,7 +6,7 @@ from supervision import BoxAnnotator, Detections
 from ultralytics import YOLO
 from supervision.draw.color import ColorPalette, Color
 
-
+# command for lunch : python accessVisionBack/yolo/yolov8_segmentation.py
 class ObjectDetection:
 
     def __init__(self, capture_index):
@@ -25,7 +25,7 @@ class ObjectDetection:
 
     def load_model(self):
 
-        model = YOLO("yolov8n.pt")  # load a pretrained YOLOv8n model
+        model = YOLO("accessVisionBack/yolo/yolov8n.pt")  # load a pretrained YOLOv8n model
         model.fuse()
 
         return model

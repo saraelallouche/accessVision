@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Coverage:
+htmlconv/
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Environments
+.env
+.venv
+env/
+venv/
+venv2/
+ENV/
+env.bak/
+venv.bak/
+
+# Media files
+media/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+content/img
+node_modules
+
+package.json
+package-lock.json
+
+#IDE
+.idea/
+.DS_Store
+/formreport/scripts_ec/
+
+
+to_generate/*
+!to_generate/.gitkeep

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caméra en direct</title>
+</head>
+<body>
+    <h1>Caméra en direct</h1>
+    <video id="camera" width="640" height="480" autoplay></video>
+
+    <script>
+        // Fonction pour démarrer la caméra
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+                const camera = document.getElementById('camera');
+                camera.srcObject = stream;
+            } catch (error) {
+                console.error('Erreur lors de l\'accès à la caméra:', error);
+            }
+        }
+
+        // Démarrer la caméra lorsque la page est chargée
+        window.addEventListener('load', startCamera);
+    </script>
+</body>
+</html>

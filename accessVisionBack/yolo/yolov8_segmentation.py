@@ -16,6 +16,7 @@ class ObjectDetection:
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         self.model = self.load_model()
+        self.trasking_tab = {}
 
         self.CLASS_NAMES_DICT = self.model.names
         color = Color(255, 0, 0)
@@ -45,9 +46,53 @@ class ObjectDetection:
         if min_x < x < max_x:
             print("Object " + name + " is centered horizontally")
             # Exemple d'utilisation
-            largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
-            taille_reelle_objet_metres = 0.47  # Taille réelle de l'objet en mètres
-            distance_focale_pixels = 3714  # Distance focale de la caméra en pixels
+            if name == "chair":
+                largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
+                taille_reelle_objet_metres = 0.47  # Taille réelle de l'objet en mètres
+                distance_focale = 4.2  # Distance focale de la caméra en pixels
+                dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
+                print("Object " + name + " is at "+ str(dist) + " meters from the camera")
+                tracking = self.tracking_obj(name, xyxy)
+
+            if name == "bottle":
+                largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
+                taille_reelle_objet_metres = 0.12  # Taille réelle de l'objet en mètres
+                distance_focale = 4200  # Distance focale de la caméra en pixels
+                dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
+                print("Object " + name + " is at "+ str(dist) + " meters from the camera")
+                tracking = self.tracking_obj(name, xyxy)
+
+    def calculer_distance_objet_camera(self, largeur_objet_pixels, taille_reelle_objet_metres, distance_focale_pixels):
+        # Calcul de la distance entre l'objet et la caméra
+        distance = (taille_reelle_objet_metres * distance_focale_pixels) / largeur_objet_pixels
+        return distance
+
+    def tracking_obj(self, name, xyxy):
+        if name in self.trasking_tab :
+            x1, y1, x2, y2 = xyxy
+            current_center = ((x1 + x2) / 2, (y1 + y2) / 2)
+            distance_threshold = 0.2 * max(x2 - x1, y2 - y1)
+            index = 0
+            for old_xyxy in self.trasking_tab[name]:
+                print(old_xyxy)
+                old_x1, old_y1, old_x2, old_y2 = old_xyxy
+                tracking_center = ((old_x1 + old_x2) / 2, (old_y1 + old_y2) / 2)
+                print("min tracker", distance_threshold, current_center[0] - tracking_center[0])
+                if abs(current_center[0] - tracking_center[0]) < distance_threshold and \
+                        abs(current_center[1] - tracking_center[1]) < distance_threshold:
+                    self.trasking_tab[name][index] = xyxy
+                    print("same "+name)
+                else:
+                    self.trasking_tab[name] = self.trasking_tab[name].append(xyxy)
+                    print("different " + name)
+                index += 1
+
+        else:
+            self.trasking_tab[name] = [xyxy]
+        print("tracking" , self.trasking_tab)
+        return self.trasking_tab
+
+
 
     def plot_bboxes(self, results, frame):
 
@@ -95,8 +140,8 @@ class ObjectDetection:
             assert ret
 
             results = self.predict(frame)
-            frame = self.plot_bboxes(results, frame)
             self.screen_width = frame.shape[1]
+            frame = self.plot_bboxes(results, frame)
 
             end_time = time()
             fps = 1 / np.round(end_time - start_time, 2)

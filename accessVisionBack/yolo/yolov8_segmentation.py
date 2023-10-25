@@ -60,7 +60,7 @@ class ObjectDetection:
                 distance_focale = 4200  # Distance focale de la caméra en pixels
                 dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
                 print("Object " + name + " is at "+ str(dist) + " meters from the camera")
-                tracking = self.tracking_obj(name, xyxy)
+                #tracking = self.tracking_obj(name, xyxy)
 
     def calculer_distance_objet_camera(self, largeur_objet_pixels, taille_reelle_objet_metres, distance_focale_pixels):
         # Calcul de la distance entre l'objet et la caméra

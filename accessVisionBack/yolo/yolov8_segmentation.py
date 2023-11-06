@@ -6,17 +6,18 @@ from supervision import BoxAnnotator, Detections
 from ultralytics import YOLO
 from supervision.draw.color import ColorPalette, Color
 
+
+
 # command for lunch : python accessVisionBack/yolo/yolov8_segmentation.py
 class ObjectDetection:
 
     def __init__(self, capture_index):
-
+        self.tracking = {}
         self.capture_index = capture_index
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         self.model = self.load_model()
-        self.trasking_tab = {}
 
         self.CLASS_NAMES_DICT = self.model.names
         color = Color(255, 0, 0)
@@ -32,33 +33,18 @@ class ObjectDetection:
         return model
 
     def predict(self, frame):
-
         results = self.model.track(source=frame, show=True, tracker="bytetrack.yaml", persist=True)
-
         return results
 
-    def is_center(self, xyxy, name, screen_width):
+    def is_center(self, xyxy, name, screen_width, tracker_id):
         x1, y1, x2, y2 = xyxy
         x = (x1 + x2) / 2  # Coordonnée x du centre de l'objet
         center_threshold = 0.2
         min_x = screen_width / 2 - (screen_width * center_threshold)
         max_x = screen_width / 2 + (screen_width * center_threshold)
         if min_x < x < max_x:
+            #self.evaluate_distance(tracker_id, name, x1, x2)
             print("Object " + name + " is centered horizontally")
-            # Exemple d'utilisation
-            if name == "chair":
-                largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
-                taille_reelle_objet_metres = 0.47  # Taille réelle de l'objet en mètres
-                distance_focale = 4.2  # Distance focale de la caméra en pixels
-                dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
-                print("Object " + name + " is at "+ str(dist) + " meters from the camera")
-
-            if name == "bottle":
-                largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
-                taille_reelle_objet_metres = 0.12  # Taille réelle de l'objet en mètres
-                distance_focale = 4200  # Distance focale de la caméra en pixels
-                dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
-                print("Object " + name + " is at "+ str(dist) + " meters from the camera")
 
     def calculer_distance_objet_camera(self, largeur_objet_pixels, taille_reelle_objet_metres, distance_focale_pixels):
         # Calcul de la distance entre l'objet et la caméra
@@ -69,26 +55,34 @@ class ObjectDetection:
 
     def plot_bboxes(self, results, frame):
         # Setup detections for visualization
-        detections = Detections(
-            xyxy=results[0].boxes.xyxy.cpu().numpy(),
-            confidence=results[0].boxes.conf.cpu().numpy(),
-            class_id=results[0].boxes.cls.cpu().numpy().astype(int),
-            tracker_id=np.array(results[0].boxes.id.int().cpu().tolist())
+        track = results[0].boxes.id
+        if track is not None:
+            detections = Detections(
+                xyxy=results[0].boxes.xyxy.cpu().numpy(),
+                confidence=results[0].boxes.conf.cpu().numpy(),
+                class_id=results[0].boxes.cls.cpu().numpy().astype(int),
+                tracker_id=np.array(results[0].boxes.id.int().cpu().tolist())
+            )
+        else:
+            detections = Detections(
+                xyxy=results[0].boxes.xyxy.cpu().numpy(),
+                confidence=results[0].boxes.conf.cpu().numpy(),
+                class_id=results[0].boxes.cls.cpu().numpy().astype(int),
+            )
 
-        )
         # Format custom labels
         self.labels = []
         for xyxy, mask, confidence, class_id, tracker_id in detections:
             self.labels.append(f"id = {tracker_id}, {self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}")
-            self.is_center(xyxy, self.CLASS_NAMES_DICT[class_id], self.screen_width)
+            self.is_center(xyxy, self.CLASS_NAMES_DICT[class_id], self.screen_width, tracker_id)
         # Annotate and display frame
         frame = self.box_annotator.annotate(scene=frame, detections=detections, labels=self.labels)
 
         return frame
 
     def __call__(self):
-        video_source = 'http://10.31.44.199:4747/video'
-        cap = cv2.VideoCapture(0)
+        video_source = 'http://192.168.1.42:4747/video'
+        cap = cv2.VideoCapture(video_source)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -114,6 +108,25 @@ class ObjectDetection:
         cap.release()
         cv2.destroyAllWindows()
 
-
 detector = ObjectDetection(capture_index=0)
 detector()
+    #def evaluate_distance(self, tracker_id, name, x1, x2):
+        # if Element.objects.filter(name=name).exists():
+        #     element = Element.objects.get(name=name)
+        #     size = element.size
+        #     largeur_objet_pixels = x2 - x1
+        #     distance_focale = 4.2
+        #     dist = self.calculer_distance_objet_camera(largeur_objet_pixels, size, distance_focale)
+        #     if tracker_id not in self.tracking:
+        #         print("Object " + name + " is at " + str(dist) + " meters from the camera")
+        #         self.tracking[tracker_id] = dist
+        #
+        #     else :
+        #         distance = self.tracking[tracker_id]
+        #         if distance < dist :
+        #             self.tracking[tracker_id] = dist
+        #
+        # else:
+        #     self.tracking[tracker_id] = 0
+
+

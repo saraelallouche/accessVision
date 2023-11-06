@@ -26,14 +26,14 @@ class ObjectDetection:
 
     def load_model(self):
 
-        model = YOLO("accessVisionBack/yolo/yolov8n.pt")  # load a pretrained YOLOv8n model
+        model = YOLO("accessVisionBack/yolo/yolov8m.pt")  # load a pretrained YOLOv8n model
         model.fuse()
 
         return model
 
     def predict(self, frame):
 
-        results = self.model(frame)
+        results = self.model.track(source=frame, show=True, tracker="bytetrack.yaml", persist=True)
 
         return results
 
@@ -52,7 +52,7 @@ class ObjectDetection:
                 distance_focale = 4.2  # Distance focale de la caméra en pixels
                 dist = self.calculer_distance_objet_camera(largeur_objet_pixels, taille_reelle_objet_metres, distance_focale)
                 print("Object " + name + " is at "+ str(dist) + " meters from the camera")
-                tracking = self.tracking_obj(name, xyxy)
+                #tracking = self.tracking_obj(name, xyxy)
 
             if name == "bottle":
                 largeur_objet_pixels = x2 - x1  # Largeur de l'objet dans l'image en pixel
@@ -95,31 +95,18 @@ class ObjectDetection:
 
 
     def plot_bboxes(self, results, frame):
-
-        xyxys = []
-        confidences = []
-        class_ids = []
-
-        # Extract detections for person class
-        for result in results[0]:
-            class_id = result.boxes.cls.cpu().numpy().astype(int)
-            if class_id == 0:
-                xyxys.append(result.boxes.xyxy.cpu().numpy())
-                confidences.append(result.boxes.conf.cpu().numpy())
-                class_ids.append(result.boxes.cls.cpu().numpy().astype(int))
-
-
-
         # Setup detections for visualization
         detections = Detections(
             xyxy=results[0].boxes.xyxy.cpu().numpy(),
             confidence=results[0].boxes.conf.cpu().numpy(),
             class_id=results[0].boxes.cls.cpu().numpy().astype(int),
+            tracker_id=np.array(results[0].boxes.id.int().cpu().tolist())
+
         )
         # Format custom labels
         self.labels = []
         for xyxy, mask, confidence, class_id, tracker_id in detections:
-            self.labels.append(f"{self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}")
+            self.labels.append(f"id = {tracker_id}, {self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}")
             self.is_center(xyxy, self.CLASS_NAMES_DICT[class_id], self.screen_width)
         # Annotate and display frame
         frame = self.box_annotator.annotate(scene=frame, detections=detections, labels=self.labels)
@@ -128,8 +115,8 @@ class ObjectDetection:
 
     def __call__(self):
         video_source = 'http://10.31.44.199:4747/video'
-        cap = cv2.VideoCapture(video_source)
-
+        cap = cv2.VideoCapture(0)
+        print("cap", cap)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -137,7 +124,6 @@ class ObjectDetection:
             start_time = time()
 
             ret, frame = cap.read()
-            assert ret
 
             results = self.predict(frame)
             self.screen_width = frame.shape[1]
@@ -150,7 +136,7 @@ class ObjectDetection:
 
             cv2.imshow('YOLOv8 Detection', frame)
 
-            if cv2.waitKey(5) & 0xFF == 27:
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
 
         cap.release()

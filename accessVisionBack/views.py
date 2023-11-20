@@ -2,12 +2,17 @@
 from subprocess import run
 
 from django.http import HttpResponse
+from django.views import View
 from rest_framework.views import APIView
+
+from accessVisionBack.yolo.yolov8_segmentation import ObjectDetection
 
 
 class YoloAPIView(APIView):
     def get(self, *args, **kwargs):
-        result = run(['python', 'yolov8_segmentation.py'], capture_output=True, text=True)
+        detector = ObjectDetection(capture_index=0)
+        detector()
         return HttpResponse()
+
 
 

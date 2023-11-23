@@ -10,4 +10,7 @@ class YoloAPIView(APIView):
         result = run(['python', 'yolov8_segmentation.py'], capture_output=True, text=True)
         return HttpResponse()
 
+class TestView(APIView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Réponse de la route test-backend.")
 

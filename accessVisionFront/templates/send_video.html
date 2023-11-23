@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../static/js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Page d'envoie de vidéo</title>
+    <style>
+        body {
+            background-color: whitesmoke;
+            text-align: center;
+        }
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .start-button {
+            margin-top:10px;
+            background-color: grey;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="centered">
+        <div> Envoie d'un flux de vidéo pour traitement back</div>
+       
+        <button class="start-button" id="startCamera">Démarrer la caméra</button>
+        <video id="cameraFeed" width="640" height="480" autoplay></video>
+            
+    </div>
+</body>
+</html>

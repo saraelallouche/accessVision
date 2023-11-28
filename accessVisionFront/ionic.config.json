@@ -1,0 +1,8 @@
+{
+  "name": "Access Vision",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "39681f58"
+}

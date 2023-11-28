@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imageData = canvas.toDataURL('image/jpeg');
                 
 
-                const response = await fetch('https://127.0.0.1:8000/back/test-backend', {
+                const response = await fetch('http://127.0.0.1:8000/back/yoloApi', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

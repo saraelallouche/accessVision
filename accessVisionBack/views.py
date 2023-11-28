@@ -25,6 +25,9 @@ class TestView(APIView):
 class YoloAPIView(APIView):
 
     def post(self,request, *args, **kwargs):
+        image = request.body
+        print(image)
+
 
         # Load a pretrained YOLOv8n model
         model = YOLO('yolov8n.pt')

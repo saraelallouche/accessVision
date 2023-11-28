@@ -24,17 +24,8 @@ def evaluate_distance(name, y1, y2):
         if 2 > dist > 1:
             message = element.alerte.format(dist)
             print(message)
-            from pydub import AudioSegment
-            from pydub.playback import play
 
-            # Charger le son
-            notification = AudioSegment.from_file("notification.wav", format="wav")
 
-            # Appliquer la spatialisation sonore (utiliser votre propre fonction ou bibliothèque ici)
-            spatialized_notification = spatialize(notification, direction="gauche")
-
-            # Jouer le son spatialisé
-            play(spatialized_notification)
             # Appel de la fonction pour annoncer vocalement le message
         else:
             print("object trop éloigné")

@@ -11,6 +11,7 @@ class YoloAPIView(APIView):
         return HttpResponse()
 
 class TestView(APIView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        print(request.body)
         return HttpResponse("Réponse de la route test-backend.")
 

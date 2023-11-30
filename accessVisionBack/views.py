@@ -1,5 +1,9 @@
 # Create your views here.
 import json
+import base64
+from PIL import Image
+from io import BytesIO
+
 from subprocess import run
 
 from django.http import HttpResponse
@@ -25,8 +29,18 @@ class TestView(APIView):
 class YoloAPIView(APIView):
 
     def post(self,request, *args, **kwargs):
-        image = request.body
-        print(image)
+        data = request.data.get('imageData')
+        image_number = request.data.get('timestamp')
+
+        # Convertir la base64 en image
+        img_data = base64.b64decode(data.split(',')[1])
+        image = Image.open(BytesIO(img_data))
+        image_number_str = str(image_number)
+
+        image_path = 'accessVisionBack/images/imageTest'+image_number_str+'.jpg'
+        image.save(image_path)
+
+        #os.remove(image_path)
 
 
         # Load a pretrained YOLOv8n model

@@ -3,7 +3,7 @@ import json
 import base64
 from PIL import Image
 from io import BytesIO
-
+import os
 from subprocess import run
 
 from django.http import HttpResponse
@@ -47,7 +47,7 @@ class YoloAPIView(APIView):
         model = YOLO('yolov8n.pt')
         # Run inference on an image
         try:
-            results = model("static/image/IMG_1423-2.jpg")  # results list
+            results = model(image_path)  # results list
             # View results
             for r in results:
                 class_names = r.names
@@ -57,6 +57,8 @@ class YoloAPIView(APIView):
                     cls = box.cls
                     class_name = class_names.get(int(cls.item()), 'Unknown')
                     is_center(xyxy[0], class_name)
+
+            os.remove(image_path)
 
             return HttpResponse('ok')
         except Exception as e:

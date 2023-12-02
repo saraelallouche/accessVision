@@ -5,7 +5,7 @@ from PIL import Image
 from io import BytesIO
 import os
 from subprocess import run
-
+from datetime import datetime
 from django.http import HttpResponse
 from django.views import View
 from rest_framework.views import APIView
@@ -31,6 +31,9 @@ class YoloAPIView(APIView):
     def post(self,request, *args, **kwargs):
         data = request.data.get('imageData')
         image_number = request.data.get('timestamp')
+        timestamp_readable = datetime.utcfromtimestamp(int(image_number) / 1000.0).strftime('%Y-%m-%d %H:%M:%S')
+
+        print(f"Heure d'envoi de l'image : {timestamp_readable}")
 
         # Convertir la base64 en image
         img_data = base64.b64decode(data.split(',')[1])
@@ -40,7 +43,7 @@ class YoloAPIView(APIView):
         image_path = 'accessVisionBack/images/imageTest'+image_number_str+'.jpg'
         image.save(image_path)
 
-        #os.remove(image_path)
+       
 
 
         # Load a pretrained YOLOv8n model

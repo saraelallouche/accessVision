@@ -37,7 +37,7 @@ class YoloAPIView(APIView):
         image = Image.open(BytesIO(img_data))
         image_number_str = str(image_number)
 
-        image_path = 'accessVisionBack/images/imageTest'+image_number_str+'.jpg'
+        image_path = 'static/image/imageTest'+image_number_str+'.jpg'
         image.save(image_path)
 
         #os.remove(image_path)

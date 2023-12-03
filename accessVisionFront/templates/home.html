@@ -1,32 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-   
-    <title>Page de départ</title>
-    <style>
-        body {
-            background-color: whitesmoke;
-            text-align: center;
-        }
-        .centered {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .start-button {
-            background-color: white;
-            color: black;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="centered">
-        <form action="{% url 'send' %}" method="get">
-            <button type="submit">Aller à la page send</button>
-        </form>    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content%}
+
+<div class="centered">
+    <form action="{% url 'send' %}" method="get">
+        <button type="submit">Aller à la page send</button>
+    </form>
+</div>
+
+{% endblock content %}

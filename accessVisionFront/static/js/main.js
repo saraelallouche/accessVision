@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('startCamera').addEventListener('click', async () => {
-        console.log("ça passe dans l'envoi de vidéo");
+
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             const video = document.getElementById('cameraFeed');
@@ -16,8 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imageData = canvas.toDataURL('image/jpeg');
                 const timestamp = Date.now();
                 const csrftoken = getCookie('csrftoken');
-                console.log(imageData);
-                const response = await fetch('https://127.0.0.1:8000/back/yoloApi', {
+
+                //mettre adresse ip locale de son ordi ->ipconfig
+                const response = await fetch('https://192.168.1.28:8000/back/yoloApi', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -27,13 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ imageData, timestamp }),
                 });
                 const result = await response.text();
-                console.log(result);
             };
 
             setInterval(sendVideoToBackend, 10000);
         } catch (error) {
             console.error("Erreur lors de l'accès à la caméra : ", error);
         }
+
     });
 });
 

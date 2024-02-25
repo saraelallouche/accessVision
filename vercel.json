@@ -1,13 +1,15 @@
 {
-    "builds":[{
-        "src":"accessBase/wsgi.py",
-        "use":"@vercel/python",
-        "config":{ "maxLambdaSize":"15mb","runtime":"python3.9"}
-    }],
-    "routes":[
-        {
-        "src":"/(.*)",
-        "dest":"accessBase.wsgi.py"
-        }
+    "functions": {
+      "api": {
+        "runtime": "python3.9",
+        "includeFiles": ["accessBase/**", "accessVisionFront/**", "accessVisionBack/**"]
+      }
+    },
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "accessBase/wsgi.py"
+      }
     ]
-}
+  }
+  

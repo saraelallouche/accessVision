@@ -1,31 +1,13 @@
 {
-    "version": 2,
-    "functions": {
-      "api/backend/**/*.py": {
-        "runtime": "python3.9",
-        "includeFiles": "api/backend/**/*"
-      }
-    },
-    "builds": [
-      {
-        "src": "accessVisionFront",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "dist"
+    "builds":[{
+        "src":"accessBase/wsgi.py",
+        "use":"@vercel/python",
+        "confit":{ "maxLambdaSize":"15mb","runtime":"python3.9"}
+    }],
+    "routes":[
+        {
+        "src":"/(.*",
+        "dest":"accessBase.wsgi.py"
         }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/accessVisionFront/dist/$1",
-        "continue": true
-      },
-      {
-        "src": "/api/(.*)",
-        "dest": "/api/backend/$1",
-        "continue": true
-      }
     ]
-  }
-  
+}

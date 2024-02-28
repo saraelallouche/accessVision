@@ -9,12 +9,14 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+PORT = int(os.environ.get('PORT', 8000))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -24,7 +26,7 @@ SECRET_KEY = 'django-insecure-pce2ltkwo44t#f*$quq!c31_aec16+13$20j+l-##57ogz8tz6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+PORT = 8000
 ALLOWED_HOSTS = ["*"]
 
 

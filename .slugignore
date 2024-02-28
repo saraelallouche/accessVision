@@ -1,1 +1,22 @@
-/.venv
+# Fichiers temporaires et caches de développement
+*.pyc
+__pycache__
+
+# Dossiers de médias (si vous utilisez un stockage externe pour les médias en production)
+media/
+
+# Fichiers de test, de documentation ou de configuration locale
+.git
+.vscode
+.env
+.pytest_cache
+
+# Fichiers spécifiques à votre éditeur ou IDE
+.idea/
+*.sublime-workspace
+
+# Fichiers spécifiques à des outils tiers
+.pycharm/
+
+# Fichiers spécifiques à des bibliothèques ou des outils spécifiques
+.venv/

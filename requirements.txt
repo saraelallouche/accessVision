@@ -6,3 +6,5 @@ numpy~=1.24.4
 opencv-python~=4.8.1.78
 supervision~=0.16.0
 ultralytics~=8.0.199
+gunicorn==21.2.0
+waitress==3.0.0

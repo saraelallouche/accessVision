@@ -20,3 +20,8 @@ media/
 
 # Fichiers spécifiques à des bibliothèques ou des outils spécifiques
 .venv/
+.venv
+/.venv
+/.venv/
+venv
+venv/

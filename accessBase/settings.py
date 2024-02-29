@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
 
 from pathlib import Path
 
@@ -33,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #Local apps
     "accessVisionBack.apps.AccessvisionConfig",
-    "accessVisionFront.apps.AccessvisionfrontConfig"
+    "accessVisionFront.apps.AccessvisionfrontConfig",
+    #external apps
+    "import_export",
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Chemin de votre choix
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800

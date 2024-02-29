@@ -11,3 +11,7 @@ supervision~=0.16.0
 ultralytics~=8.0.199
 gunicorn==21.2.0
 waitress==3.0.0
+django-import-export
+pyttsx3==2.90
+django-sslserver==0.22
+

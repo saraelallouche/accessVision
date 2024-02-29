@@ -14,4 +14,4 @@ waitress==3.0.0
 django-import-export
 pyttsx3==2.90
 django-sslserver==0.22
-
+opencv-python-headless

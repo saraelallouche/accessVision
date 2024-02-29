@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT accessBase.wsgi:application
+web: python manage.py runsslserver 0.0.0.0:$PORT

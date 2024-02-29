@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const timestamp = Date.now();
 
                 //mettre adresse ip locale de son ordi ->ipconfig
-                const response = await fetch('https://192.168.1.28:8000/back/yoloApi', {
+                const response = await fetch('https://127.0.0.1:8000/back/yoloApi', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

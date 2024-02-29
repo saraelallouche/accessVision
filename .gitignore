@@ -43,3 +43,6 @@ package-lock.json
 
 to_generate/*
 !to_generate/.gitkeep
+
+/accessVisionBack/images
+accessVisionBack/images

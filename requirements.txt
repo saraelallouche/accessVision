@@ -6,7 +6,6 @@ torch==2.2.0+cpu
 -f https://download.pytorch.org/whl/torch_stable.html
 torchvision==0.17.0+cpu
 numpy~=1.24.4
-opencv-python~=4.8.1.78
 supervision~=0.16.0
 ultralytics~=8.0.199
 gunicorn==21.2.0

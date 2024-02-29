@@ -1,8 +1,10 @@
 django==4.1.7
 djangorestframework~=3.13.0
 requests~=2.31.0
-torch==1.8.1+cpu 
-torchvision==0.9.1+cpu
+-f https://download.pytorch.org/whl/torch_stable.html 
+torch==2.2.0+cpu 
+-f https://download.pytorch.org/whl/torch_stable.html
+torchvision==0.17.0+cpu
 numpy~=1.24.4
 opencv-python~=4.8.1.78
 supervision~=0.16.0
